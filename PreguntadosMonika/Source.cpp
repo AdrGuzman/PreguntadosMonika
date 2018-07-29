@@ -31,6 +31,19 @@ struct categoria
 	pregunta preguntas[PREGUNTA_TAMANIO];
 };
 
+struct listaCategoria
+{
+	categoria unaCategoria;
+	struct listaCategoria *ptrSiguiente;
+};
+
+typedef struct listaCategoria ListaCategoria;
+typedef ListaCategoria *ptrListaCategoria;
+
+void empujarListaCategoria(ptrListaCategoria, categoria);
+void imprimirListaCategorias(ptrListaCategoria);
+void buscarCategorias(ptrListaCategoria);
+
 int mostrarMenuPrincipal();
 void buscarCategorias(categoria[], int);
 int mostrarCategorias(categoria[], int);
@@ -39,9 +52,13 @@ char mostrarInstrucciones();
 categoria buscarDatos(categoria, int);
 void mostrarDatos(categoria, int, int);
 void convertirCadenaAMinusculas(char[], char[]);
+void juego_perdido();
+int esNumero(char[]);
 
 int main()
 {
+	ptrListaCategoria ptrPila;
+
 	int opc, categoriaId;
 	categoria categorias[CATEGORIA_TAMANIO];
 	categoria unaCategoria;
@@ -56,11 +73,14 @@ int main()
 			iniciar = mostrarInstrucciones();
 			if (iniciar == 's')
 			{
-				buscarCategorias(categorias, CATEGORIA_TAMANIO);
+				buscarCategorias(ptrPila);
+				imprimirListaCategorias(ptrPila);
+
+				/*buscarCategorias(categorias, CATEGORIA_TAMANIO);
 				categoriaId = mostrarCategorias(categorias, CATEGORIA_TAMANIO);
 				unaCategoria = buscarCategoria(categorias, CATEGORIA_TAMANIO, categoriaId);
 				unaCategoria = buscarDatos(unaCategoria, PREGUNTA_TAMANIO);
-				mostrarDatos(unaCategoria, PREGUNTA_TAMANIO, RESPUESTA_TAMANIO);
+				mostrarDatos(unaCategoria, PREGUNTA_TAMANIO, RESPUESTA_TAMANIO);*/
 			}
 			break;
 
@@ -85,9 +105,69 @@ int main()
 	return 0;
 }
 
+void empujarListaCategoria(ptrListaCategoria *ptrCima, categoria dato)
+{
+	ptrListaCategoria ptrNuevo;
+
+	ptrNuevo = malloc(sizeof(ListaCategoria));
+
+	if (ptrNuevo != NULL)
+	{
+		ptrNuevo->unaCategoria = dato;
+		ptrNuevo->ptrSiguiente = *ptrCima;
+		*ptrCima = ptrNuevo;
+	}
+	else
+	{
+		printf("La categoria: %s no se inserto. Memoria insuficiente.", dato.nombre);
+	}
+}
+
+void imprimirListaCategorias(ptrListaCategoria ptrActual)
+{
+	if (ptrActual == NULL)
+	{
+		printf("No hay categorias.\n\n");
+	}
+	else
+	{
+		printf("Categorias\n");
+		printf("==========\n\n");
+		while (ptrActual != NULL)
+		{
+			printf("[%d]\t%s\t", ptrActual->unaCategoria.id, ptrActual->unaCategoria.nombre);
+		}
+	}
+}
+
+void buscarCategorias(ptrListaCategoria ptrPila)
+{
+	int i = 0;
+	categoria unaCategoria;
+
+	FILE *doc;
+
+	if ((doc = fopen("categorias.txt", "r")) == NULL)
+	{
+		printf("El archivo de las categorias no pudo abrirse.\n");
+	}
+	else
+	{
+		do
+		{
+			fscanf(doc, "%d%s", &unaCategoria.id, unaCategoria.nombre);
+			empujarListaCategoria(ptrPila, unaCategoria);
+			i++;
+		} while (!feof(doc));
+
+		fclose(doc);
+	}
+}
+
 int mostrarMenuPrincipal()
 {
 	int opc;
+	char respuesta[100];
 
 	system("color 0A");
 
@@ -99,8 +179,24 @@ int mostrarMenuPrincipal()
 	printf("\n [2]........Jugar");
 	printf("\n [3]........Salir\n ");
 
-	printf("Elija una opcion: ");
-	scanf("%d", &opc);
+	do
+	{
+		printf("Elija una opcion [1-3]: ");
+		scanf("%s", respuesta);
+
+		if (esNumero(respuesta))
+		{
+			opc = atoi(respuesta);
+			if (opc < 1 || opc > 3)
+			{
+				printf("ERROR ");
+			}
+		}
+		else
+		{
+			printf("ERROR SOLO PUEDE INGRESAR NUMEROS ");
+		}
+	} while (opc < 1 || opc > 3);
 
 	system("cls");
 
@@ -275,7 +371,8 @@ void convertirCadenaAMinusculas(char destino[], char origen[])
 
 char mostrarInstrucciones()
 {
-	char respuesta;
+	char respuesta[100];
+	int longitud = 0;
 	
 	printf("\n \t INSTRUCCIONES\n");
 	printf("\n\t    ___     ");
@@ -296,10 +393,60 @@ char mostrarInstrucciones()
 	printf("\nCada categoria cuenta con 3 preguntas, si respondes correctamente las preguntas\n pasas a otra categoria a tu eleccion. \n entre mas puntos obtengas mas rapido crecera tu planta");
 	printf("\n divierte y vence a tus amigos!!");
 
-	printf("\n \n Desea Iniciar el juego? [S/N]: ");
-	scanf(" %c", &respuesta);
+	do
+	{
+		printf("Desea Iniciar el juego? [S/N]: ");
+		scanf("%s", &respuesta);
+
+		longitud = strlen(respuesta) - 1;
+
+		if (longitud == 1)
+		{
+			tolower(respuesta[0]);
+
+			if (respuesta[0] != 's' && respuesta[0] != 'n')
+			{
+				printf("ERROR ");
+			}
+		}
+	} while (respuesta[0] != 's' && respuesta[0] != 'n');
 	
 	system("cls");
 
-	return tolower(respuesta);
+	return respuesta[0];
+}
+
+int esNumero(char entrada[])
+{
+	int longitud, i = 0, esValido = 1;
+	longitud = strlen(entrada);
+
+	for (i = 0; i < longitud; i++)
+	{
+		if (!isdigit(entrada[i]))
+		{
+			esValido = 0;
+			return esValido;
+		}
+	}
+
+	return esValido;
+}
+
+void juego_perdido()
+{
+	system("cls");
+	system("color 0E");
+	printf("\n  \t#######  #######  ####      ####  #######");
+	printf("\n  \t##       ##   ##  ##  #    #  ##  ##");
+	printf("\n  \t##  ###  #######  ##   ###    ##  #####");
+	printf("\n  \t##   ##  ##   ##  ##          ##  ##");
+	printf("\n  \t#######  ##   ##  ##          ##  #######\n");
+
+	printf("\n  \t#######   ##          ##  #######  #######");
+	printf("\n  \t##   ##    ##        ##   ##       ##   ##");
+	printf("\n  \t##   ##     ##      ##    #####    ######");
+	printf("\n  \t##   ##      ##    ##     ##       ##    ##");
+	printf("\n  \t#######        #####      #######  ##     ##\n");
+
 }

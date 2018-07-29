@@ -1,4 +1,6 @@
 ﻿  Source.cpp
-c:\users\adria\documents\visual studio 2015\projects\preguntadosmonika\preguntadosmonika\source.cpp(50): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-  PreguntadosMonika.vcxproj -> C:\Users\adria\Documents\Visual Studio 2015\Projects\PreguntadosMonika\Debug\PreguntadosMonika.exe
-  PreguntadosMonika.vcxproj -> C:\Users\adria\Documents\Visual Studio 2015\Projects\PreguntadosMonika\Debug\PreguntadosMonika.pdb (Full PDB)
+c:\users\adria\documents\visual studio 2015\projects\preguntadosmonika\preguntadosmonika\source.cpp(67): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+c:\users\adria\documents\visual studio 2015\projects\preguntadosmonika\preguntadosmonika\source.cpp(112): error C2440: '=': cannot convert from 'void *' to 'ptrListaCategoria'
+  c:\users\adria\documents\visual studio 2015\projects\preguntadosmonika\preguntadosmonika\source.cpp(112): note: Conversion from 'void*' to pointer to non-'void' requires an explicit cast
+c:\users\adria\documents\visual studio 2015\projects\preguntadosmonika\preguntadosmonika\source.cpp(416): error C2664: 'int tolower(int)': cannot convert argument 1 from 'char [100]' to 'int'
+  c:\users\adria\documents\visual studio 2015\projects\preguntadosmonika\preguntadosmonika\source.cpp(416): note: There is no context in which this conversion is possible
