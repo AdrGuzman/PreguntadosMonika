@@ -1,0 +1,4 @@
+﻿  Source.cpp
+c:\users\adria\documents\visual studio 2015\projects\preguntadosmonika\preguntadosmonika\source.cpp(50): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  PreguntadosMonika.vcxproj -> C:\Users\adria\Documents\Visual Studio 2015\Projects\PreguntadosMonika\Debug\PreguntadosMonika.exe
+  PreguntadosMonika.vcxproj -> C:\Users\adria\Documents\Visual Studio 2015\Projects\PreguntadosMonika\Debug\PreguntadosMonika.pdb (Full PDB)

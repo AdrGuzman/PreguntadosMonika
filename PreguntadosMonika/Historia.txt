@@ -1,0 +1,3 @@
+1	¿En_que_anio_se_descubrio_America?
+2	¿Quien_es_el_dictador_mas_grande_del_mundo?
+3	¿A_que_pais_pertenece_el_lema_'IGUALDAD,_LIBERTAD_Y_FRATERNIDAD'?

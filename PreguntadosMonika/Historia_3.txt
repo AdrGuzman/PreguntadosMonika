@@ -1,0 +1,3 @@
+1	Espania	0
+2	Francia	1
+3	Honduras	0
